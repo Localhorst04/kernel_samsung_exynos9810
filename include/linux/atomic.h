@@ -1027,23 +1027,9 @@ static inline int atomic_dec_if_positive(atomic_t *v)
 #define __atomic64_try_cmpxchg(type, _p, _po, _n)			\
 ({									\
 	typeof(_po) __po = (_po);					\
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> dee9b0373454 (locking/atomic: Fix atomic_try_cmpxchg() semantics)
-	typeof(*(_po)) __r, __o = *__po;				\
-	__r = atomic64_cmpxchg##type((_p), __o, (_n));			\
-	if (unlikely(__r != __o))					\
-		*__po = __r;						\
-	likely(__r == __o);						\
-<<<<<<< HEAD
-=======
 	typeof(*(_po)) __o = *__po;					\
 	*__po = atomic64_cmpxchg##type((_p), __o, (_n));		\
 	(*__po == __o);							\
->>>>>>> 9ef8fb281934 (locking/atomic: Introduce atomic_try_cmpxchg())
-=======
->>>>>>> dee9b0373454 (locking/atomic: Fix atomic_try_cmpxchg() semantics)
 })
 
 #define atomic64_try_cmpxchg(_p, _po, _n)		__atomic64_try_cmpxchg(, _p, _po, _n)
