@@ -197,7 +197,7 @@ EXPORT_SYMBOL(refcount_sub_and_test);
  * refcount_dec_and_test - decrement a refcount and test if it is 0
  * @r: the refcount
  *
- * Similar to atomic_dec_and_test(), it will WARN on underflow and fail to
+* Similar to atomic_dec_and_test(), it will WARN on underflow and fail to
  * decrement when saturated at UINT_MAX.
  *
  * Provides release memory ordering, such that prior loads and stores are done
@@ -293,6 +293,7 @@ EXPORT_SYMBOL(refcount_dec_not_one);
  * @r: the refcount
  * @lock: the mutex to be locked
  *
+refcounts: Out-of-line everything)
  * Similar to atomic_dec_and_mutex_lock(), it will WARN on underflow and fail
  * to decrement when saturated at UINT_MAX.
  *
@@ -348,4 +349,3 @@ bool refcount_dec_and_lock(refcount_t *r, spinlock_t *lock)
 	return true;
 }
 EXPORT_SYMBOL(refcount_dec_and_lock);
-

@@ -14,7 +14,6 @@
  * there. This avoids wrapping the counter and causing 'spurious'
  * use-after-free bugs.
  */
-
 typedef struct refcount_struct {
 	atomic_t refs;
 } refcount_t;
@@ -94,9 +93,6 @@ extern __must_check bool refcount_dec_if_one(refcount_t *r);
 extern __must_check bool refcount_dec_not_one(refcount_t *r);
 extern __must_check bool refcount_dec_and_mutex_lock(refcount_t *r, struct mutex *lock);
 extern __must_check bool refcount_dec_and_lock(refcount_t *r, spinlock_t *lock);
-=======
-	REFCOUNT_WARN(!refcount_add_not_zero(i, r), "refcount_t: addition on 0; use-after-free.\n");
-}
 
 /*
  * Similar to atomic_inc_not_zero(), will saturate at UINT_MAX and WARN.
@@ -290,6 +286,5 @@ bool refcount_dec_and_lock(refcount_t *r, spinlock_t *lock)
 
 	return true;
 }
->>>>>>> 91600e319e52 (refcount_t: Introduce a special purpose refcount type)
 
 #endif /* _LINUX_REFCOUNT_H */
