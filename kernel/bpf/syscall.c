@@ -882,11 +882,8 @@ static int bpf_prog_load(union bpf_attr *attr)
 		/* failed to allocate fd */
 		goto free_used_maps;
 
-<<<<<<< HEAD
-=======
 	bpf_prog_kallsyms_add(prog);
 	trace_bpf_prog_load(prog, err);
->>>>>>> e9dc3b364d21 (bpf: make jited programs visible in traces)
 	return err;
 
 free_used_maps:
