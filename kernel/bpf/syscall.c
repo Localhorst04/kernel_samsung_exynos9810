@@ -21,7 +21,10 @@
 #include <linux/filter.h>
 #include <linux/version.h>
 
-#define BPF_OBJ_FLAG_MASK   (BPF_F_RDONLY | BPF_F_WRONLY)
+#include <linux/kernel.h>
+#include <linux/idr.h>
+
+#include <linux/cred.h>
 
 DEFINE_PER_CPU(int, bpf_prog_active);
 static DEFINE_IDR(prog_idr);
