@@ -191,6 +191,8 @@ enum bpf_attach_type {
  */
 #define BPF_F_NO_COMMON_LRU	(1U << 1)
 
+#define BPF_OBJ_NAME_LEN 16U
+
 /* Flags for accessing BPF object */
 #define BPF_F_RDONLY		(1U << 3)
 #define BPF_F_WRONLY		(1U << 4)
@@ -224,6 +226,11 @@ union bpf_attr {
 		__u32		log_size;	/* size of user buffer */
 		__aligned_u64	log_buf;	/* user supplied buffer */
 		__u32		kern_version;	/* checked when prog_type=kprobe */
+<<<<<<< HEAD
+=======
+		__u32		prog_flags;
+		__u8		prog_name[BPF_OBJ_NAME_LEN];
+>>>>>>> 77a948abebcf (BACKPORT: bpf: Add name, load_time, uid and map_ids to bpf_prog_info)
 	};
 
 	struct { /* anonymous struct used by BPF_OBJ_* commands */
@@ -697,6 +704,11 @@ struct bpf_prog_info {
 	__u32 xlated_prog_len;
 	__aligned_u64 jited_prog_insns;
 	__aligned_u64 xlated_prog_insns;
+	__u64 load_time;	/* ns since boottime */
+	__u32 created_by_uid;
+	__u32 nr_map_ids;
+	__aligned_u64 map_ids;
+	__u8  name[BPF_OBJ_NAME_LEN];
 } __attribute__((aligned(8)));
 
 struct bpf_map_info {
