@@ -44,6 +44,7 @@ typedef u8 __bitwise blk_status_t;
  */
 struct bio {
 	struct bio		*bi_next;	/* request queue link */
+	struct block_device	*bi_bdev;
 	struct gendisk		*bi_disk;
 	u8			bi_partno;
 	blk_status_t		bi_status;
@@ -54,6 +55,7 @@ struct bio {
 	unsigned short		bi_flags;	/* status, etc and bvec pool number */
 	unsigned short		bi_ioprio;
 	unsigned short		bi_write_hint;
+	int					bi_error;
 	unsigned short		bi_sec_flags;	/* SEC only */
 
 	struct bvec_iter	bi_iter;
