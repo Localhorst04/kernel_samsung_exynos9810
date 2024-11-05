@@ -3114,28 +3114,12 @@ static const struct bpf_verifier_ops cg_skb_ops = {
 	.convert_ctx_access	= sk_filter_convert_ctx_access,
 };
 
-<<<<<<< HEAD
-=======
-static const struct bpf_verifier_ops lwt_inout_ops = {
-	.get_func_proto		= lwt_inout_func_proto,
-	.is_valid_access	= lwt_is_valid_access,
-	.convert_ctx_access	= sk_filter_convert_ctx_access,
-};
-
-static const struct bpf_verifier_ops lwt_xmit_ops = {
-	.get_func_proto		= lwt_xmit_func_proto,
-	.is_valid_access	= lwt_is_valid_access,
-	.convert_ctx_access	= sk_filter_convert_ctx_access,
-	.gen_prologue		= tc_cls_act_prologue,
-};
-
 static const struct bpf_verifier_ops cg_sock_ops = {
 	.get_func_proto		= sk_filter_func_proto,
 	.is_valid_access	= sock_filter_is_valid_access,
 	.convert_ctx_access	= sock_filter_convert_ctx_access,
 };
 
->>>>>>> 56830cacf2a0 (bpf: Add new cgroup attach type to enable sock modifications)
 static struct bpf_prog_type_list sk_filter_type __read_mostly = {
 	.ops	= &sk_filter_ops,
 	.type	= BPF_PROG_TYPE_SOCKET_FILTER,
