@@ -226,11 +226,9 @@ union bpf_attr {
 		__u32		log_size;	/* size of user buffer */
 		__aligned_u64	log_buf;	/* user supplied buffer */
 		__u32		kern_version;	/* checked when prog_type=kprobe */
-<<<<<<< HEAD
-=======
+
 		__u32		prog_flags;
 		__u8		prog_name[BPF_OBJ_NAME_LEN];
->>>>>>> 77a948abebcf (BACKPORT: bpf: Add name, load_time, uid and map_ids to bpf_prog_info)
 	};
 
 	struct { /* anonymous struct used by BPF_OBJ_* commands */
