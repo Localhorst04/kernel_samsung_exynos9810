@@ -695,7 +695,6 @@ static inline bool bpf_jit_blinding_enabled(void)
 
 	return true;
 }
-#else
 
 static inline bool bpf_jit_kallsyms_enabled(void)
 {
