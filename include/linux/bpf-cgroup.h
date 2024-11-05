@@ -57,6 +57,10 @@ int __cgroup_bpf_run_filter(struct sock *sk,
 int __cgroup_bpf_run_filter_sk(struct sock *sk,
 			       enum bpf_attach_type type);
 
+int __cgroup_bpf_run_filter_skb(struct sock *sk,
+				struct sk_buff *skb,
+				enum bpf_attach_type type);
+
 /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
 #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
 ({									      \

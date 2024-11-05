@@ -567,6 +567,7 @@ static int map_delete_elem(union bpf_attr *attr)
 	if (!err)
 		trace_bpf_map_delete_elem(map, ufd, key);
 
+free_key:
 	kfree(key);
 err_put:
 	fdput(f);
@@ -970,6 +971,7 @@ static int bpf_obj_get(const union bpf_attr *attr)
 
 static int bpf_prog_attach(const union bpf_attr *attr)
 {
+	enum bpf_prog_type ptype;
 	struct bpf_prog *prog;
 	struct cgroup *cgrp;
 	int ret;
@@ -1037,9 +1039,6 @@ static int bpf_prog_detach(const union bpf_attr *attr)
 		cgrp = cgroup_get_from_fd(attr->target_fd);
 		if (IS_ERR(cgrp))
 			return PTR_ERR(cgrp);
-
-		ret = cgroup_bpf_update(cgrp, NULL, attr->attach_type, false);
-		cgroup_put(cgrp);
 
 	default:
 		return -EINVAL;
