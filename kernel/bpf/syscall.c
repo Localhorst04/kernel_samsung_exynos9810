@@ -21,10 +21,7 @@
 #include <linux/filter.h>
 #include <linux/version.h>
 
-#include <linux/kernel.h>
-#include <linux/idr.h>
-
-#include <linux/cred.h>
+#define BPF_OBJ_FLAG_MASK   (BPF_F_RDONLY | BPF_F_WRONLY)
 
 DEFINE_PER_CPU(int, bpf_prog_active);
 static DEFINE_IDR(prog_idr);
@@ -245,31 +242,7 @@ int bpf_get_file_flag(int flags)
 		   offsetof(union bpf_attr, CMD##_LAST_FIELD) - \
 		   sizeof(attr->CMD##_LAST_FIELD)) != NULL
 
-/* dst and src must have at least BPF_OBJ_NAME_LEN number of bytes.
- * Return 0 on success and < 0 on error.
- */
-static int bpf_obj_name_cpy(char *dst, const char *src)
-{
-	const char *end = src + BPF_OBJ_NAME_LEN;
-
-	/* Copy all isalnum() and '_' char */
-	while (src < end && *src) {
-		if (!isalnum(*src) && *src != '_')
-			return -EINVAL;
-		*dst++ = *src++;
-	}
-
-	/* No '\0' found in BPF_OBJ_NAME_LEN number of bytes */
-	if (src == end)
-		return -EINVAL;
-
-	/* '\0' terminates dst */
-	*dst = 0;
-
-	return 0;
-}
-
-#define BPF_MAP_CREATE_LAST_FIELD numa_node
+#define BPF_MAP_CREATE_LAST_FIELD inner_map_fd
 /* called via syscall */
 static int map_create(union bpf_attr *attr)
 {
@@ -970,11 +943,6 @@ static int bpf_prog_load(union bpf_attr *attr)
 	if (err < 0)
 		goto free_prog;
 
-	prog->aux->load_time = ktime_get_boot_ns();
-	err = bpf_obj_name_cpy(prog->aux->name, attr->prog_name);
-	if (err)
-		goto free_prog;
-
 	/* run eBPF verifier */
 	err = bpf_check(&prog, attr);
 	if (err < 0)
@@ -1181,20 +1149,6 @@ static int bpf_prog_get_info_by_fd(struct bpf_prog *prog,
 					       prog->aux->user->uid);
 
 	memcpy(info.tag, prog->tag, sizeof(prog->tag));
-	memcpy(info.name, prog->aux->name, sizeof(prog->aux->name));
-
-	ulen = info.nr_map_ids;
-	info.nr_map_ids = prog->aux->used_map_cnt;
-	ulen = min_t(u32, info.nr_map_ids, ulen);
-	if (ulen) {
-		u32 *user_map_ids = (u32 *)info.map_ids;
-		u32 i;
-
-		for (i = 0; i < ulen; i++)
-			if (put_user(prog->aux->used_maps[i]->id,
-				     &user_map_ids[i]))
-				return -EFAULT;
-	}
 
 	if (!capable(CAP_SYS_ADMIN)) {
 		info.jited_prog_len = 0;
